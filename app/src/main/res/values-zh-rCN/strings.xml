@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">Doodle</string>
+
+    <string name="signal_request">单独用例</string>
+    <string name="album">相册</string>
+    <string name="remote">在线图片</string>
+
+    <string name="test_asset">Test asset</string>
+    <string name="test_gif">Test gif</string>
+    <string name="test_animated_webp">Test Animated Webp</string>
+    <string name="test_http">Test http</string>
+    <string name="test_rotated">Test rotated</string>
+    <string name="test_transformation">Test transformation</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">设置</string>
+
+    <string name="remote_images">图片浏览</string>
+    <string name="downloaded">已下载</string>
+    <string name="setting">设置</string>
+
+    <string name="footer_load_tips">加载中…</string>
+    <string name="footer_failed_tips">加载失败，请重试</string>
+    <string name="footer_end_tips">--end--</string>
+
+    <string name="my_channel">我的频道</string>
+    <string name="other_channel">其他频道</string>
+    <string name="my_channel_tips">点击删除,拖拽排序</string>
+    <string name="other_channel_tips">点击添加到我的频道</string>
+    <string name="add">添加</string>
+    <string name="finish">完成</string>
+
+    <string name="downloaded_path">收藏路径</string>
+    <string name="not_set">未设置</string>
+
+    <string name="select_path">选择目录</string>
+    <string name="last_level">上一级</string>
+    <string name="select">选中</string>
+
+    <string name="item"> %1$d 项</string>
+    <string name="current_path_is_null">当前路径为空</string>
+    <string name="show_hidden_files">显示隐藏目录</string>
+    <string name="hidden_files">不显示隐藏目录</string>
+    <string name="download">下载</string>
+
+    <string name="detail">详情</string>
+    <string name="connect_tips">网络未连接，请连接网络</string>
+    <string name="download_success">下载成功</string>
+    <string name="download_failed">下载失败</string>
+    <string name="cannot_get_dir">无法获取目录</string>
+    <string name="get_image_list_failed">获取图片列表失败</string>
+
+    <string name="back">返回</string>
+
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="permission_confirm">权限确认</string>
+    <string name="storage_permission_request">此操作需要授权访问存储的权限</string>
+
+    <string name="to_system_setting">前往系统设置</string>
+
+    <string name="photo_single_select">图片，单选</string>
+    <string name="select_photo_path">选择保存路径</string>
+    <string name="go_to_setting">去设置</string>
+
+    <string name="select_pictures_and_videos_limit">最多只能选择%1$d个图片或者视频</string>
+
+    <string name="limit">数量:</string>
+    <string name="limit_hint">9</string>
+    <string name="multi_choice">多选</string>
+    <string name="single_choice">单选</string>
+    <string name="select_option">筛选条件:</string>
+    <string name="all">全选</string>
+    <string name="video">视频</string>
+    <string name="image">图片</string>
+    <string name="clear_selected">清除已选中</string>
+    <string name="all_medias">图片和视频</string>
+    <string name="all_videos">所有视频</string>
+    <string name="all_images">所有图片</string>
+
+
+    <string name="channel_anime">动漫</string>
+    <string name="channel_travel_places">旅行</string>
+    <string name="channel_pets">动物</string>
+    <string name="channel_photography">摄影</string>
+    <string name="channel_apparel">服装</string>
+
+</resources>

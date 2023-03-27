@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">Doodle</string>
+
+
+    <string name="signal_request">Signal Request</string>
+    <string name="album">Album</string>
+    <string name="remote">Remote</string>
+
+    <string name="test_asset">Test asset</string>
+    <string name="test_gif">Test gif</string>
+    <string name="test_animated_webp">Test Animated Webp</string>
+    <string name="test_http">Test http</string>
+    <string name="test_rotated">Test rotated</string>
+    <string name="test_transformation">Test transformation</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="remote_images">Web Pictures</string>
+    <string name="downloaded">Downloaded</string>
+    <string name="setting">Setting</string>
+
+    <string name="footer_load_tips">Loading…</string>
+    <string name="footer_failed_tips">Loading failed, please retry</string>
+    <string name="footer_end_tips">--end--</string>
+
+    <string name="my_channel">My Channel</string>
+    <string name="other_channel">Other Channel</string>
+    <string name="my_channel_tips">Click to remove, drag to sort</string>
+    <string name="other_channel_tips">Add to My Channel by clicking.</string>
+    <string name="add">Add</string>
+    <string name="finish">Done</string>
+
+    <string name="downloaded_path">Downloaded path</string>
+    <string name="not_set">The path has not been set</string>
+
+    <string name="select_path">Select the path</string>
+    <string name="last_level">Last level</string>
+    <string name="select">Done</string>
+
+    <string name="item"> %1$d items</string>
+    <string name="current_path_is_null">Current path is null</string>
+    <string name="show_hidden_files">Shows Hidden directories</string>
+    <string name="hidden_files">Hide hidden directories</string>
+    <string name="download">Download</string>
+
+    <string name="detail">Detail</string>
+    <string name="connect_tips">Network is not connected</string>
+    <string name="download_success">Download success</string>
+    <string name="download_failed">Download failed</string>
+    <string name="cannot_get_dir">Can not get the directory</string>
+    <string name="get_image_list_failed">Fetch picture list failed</string>
+
+    <string name="back">Back</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="permission_confirm">Permission confirm</string>
+    <string name="storage_permission_request">The operation needs the storage access permission</string>
+
+    <string name="to_system_setting">Go to system settings</string>
+
+    <string name="photo_single_select">photo, single select</string>
+    <string name="select_photo_path">Select a path to save files</string>
+    <string name="go_to_setting">Go to setting</string>
+
+    <string name="select_pictures_and_videos_limit">You can choose %1$d pictures or videos at most</string>
+
+    <string name="limit">Limit:</string>
+    <string name="limit_hint">9</string>
+    <string name="multi_choice">Multi choice</string>
+    <string name="single_choice">Single choice</string>
+    <string name="select_option">Select option:</string>
+    <string name="all">All</string>
+    <string name="video">Video</string>
+    <string name="image">Image</string>
+    <string name="clear_selected">Clear selected</string>
+    <string name="all_medias">All</string>
+    <string name="all_videos">All Videos</string>
+    <string name="all_images">All Images</string>
+
+    <string name="channel_anime">anime</string>
+    <string name="channel_travel_places">travel</string>
+    <string name="channel_pets">animal</string>
+    <string name="channel_photography">photography</string>
+    <string name="channel_apparel">dress</string>
+
+</resources>

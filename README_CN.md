@@ -25,7 +25,7 @@ Doodle实现的功能包括但不限于以下列表：
 
 ### 下载
 ```gradle
-implementation 'io.github.billywei01:doodle:2.0.2'
+implementation 'io.github.billywei01:doodle:2.0.3'
 ```
 
 ### 全局配置

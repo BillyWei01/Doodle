@@ -286,7 +286,7 @@ final class Decoder {
         return bitmap;
     }
 
-    private static float getScale(int sourceWidth, int sourceHeight, int targetWidth, int targetHeight,
+    static float getScale(int sourceWidth, int sourceHeight, int targetWidth, int targetHeight,
                                   ClipType clipType, boolean enableUpscale) {
         if (sourceWidth <= 0 || sourceHeight <= 0 || targetWidth <= 0 || targetHeight <= 0) {
             return 1f;

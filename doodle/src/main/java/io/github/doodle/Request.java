@@ -50,7 +50,6 @@ public final class Request {
     Drawable errorDrawable;
     int animationId;
     Animation animation;
-    boolean crossFade;
     int crossFadeDuration;
     boolean alwaysAnimation = false;
     int hostHash;
@@ -146,11 +145,6 @@ public final class Request {
      * target size is 600x600, scaleType='centerCrop',<br>
      * it will get a 400x400 bitmap, to attach to the target.<br>
      * But if you want to get a 600x600 bitmap, open this option.<br>
-     * Note: In this case, because of the size of source is just 480x400,
-     * if will not be sharper to get a 600x600 bitmap with up sampling.
-     * <p/>
-     * This option only taking effect when clipType is FIT_START, FIT_END, FIT_CENTER
-     * or CENTER_CROP.
      */
     public Request enableUpscale() {
         this.enableUpscale = true;
@@ -292,10 +286,7 @@ public final class Request {
     }
 
     public Request crossFade(int duration) {
-        if (duration > 0) {
-            this.crossFadeDuration = duration;
-            crossFade = true;
-        }
+        this.crossFadeDuration = duration;
         return this;
     }
 

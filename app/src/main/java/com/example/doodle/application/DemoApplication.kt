@@ -9,6 +9,7 @@ import com.example.doodle.imageloader.AnimatedWebpDecoder
 import com.example.doodle.imageloader.GifDecoder
 import com.example.doodle.imageloader.IOExecutor
 import com.example.doodle.imageloader.OkHttpSourceFetcher
+import com.example.doodle.imageloader.SvgDecoder
 import com.example.doodle.util.UncaughtExceptionInterceptor
 import io.github.album.EasyAlbum
 import io.github.doodle.Doodle
@@ -43,6 +44,7 @@ class DemoApplication : Application() {
                 .setHttpSourceFetcher(OkHttpSourceFetcher)
                 .addDrawableDecoders(GifDecoder)
                 .addDrawableDecoders(AnimatedWebpDecoder)
+                .addBitmapDecoders(SvgDecoder)
 
             EasyAlbum.config()
                 .setLogger(Logger)

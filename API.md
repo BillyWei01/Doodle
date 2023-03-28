@@ -18,6 +18,7 @@ void notifyResume(Object) | Notify pause event of host.
 void notifyDestroy(Object) | Notify pause event of host.
 void trimMemory(int) | Trim memory of LruCache.
 void clearMemory() | Remove all bitmap from LruCache.
+float getScale(...) | Calculate the scale factor by source size and decoding info.
 
 
 ## Config (Global Configuration)

@@ -18,10 +18,6 @@ object AlbumImageLoader : ImageLoader {
 
     private var count = 0
 
-    fun resetLoadingCount() {
-        count = 0
-    }
-
     override fun loadPreview(data: MediaData, imageView: ImageView, asBitmap: Boolean) {
         Doodle.load(data.properUri)
             .diskCacheStrategy(DiskCacheStrategy.NONE)

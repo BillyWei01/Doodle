@@ -215,7 +215,7 @@ final class Controller {
 
     static void setBitmap(Request request, ImageView imageView, Bitmap bitmap, Boolean fromMemory){
         if (request.alwaysAnimation || !fromMemory) {
-            if (request.crossFade) {
+            if (request.crossFadeDuration > 0) {
                 crossFade(imageView, bitmap, request);
             } else {
                 imageView.setImageBitmap(bitmap);

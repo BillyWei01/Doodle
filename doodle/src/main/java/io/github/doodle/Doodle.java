@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 
 import io.github.doodle.LifecycleManager.Event;
+import io.github.doodle.enums.ClipType;
 
 import java.io.File;
 
@@ -131,5 +132,13 @@ public final class Doodle {
 
     public static void notifyDestroy(Object host) {
         LifecycleManager.notify(host, Event.DESTROY);
+    }
+
+    /**
+     * Calculate the scale factor by source size and decoding info.
+     */
+    public static float getScale(int sourceWidth, int sourceHeight, int targetWidth, int targetHeight,
+                                 ClipType clipType, boolean enableUpscale) {
+        return Decoder.getScale(sourceWidth, sourceHeight, targetWidth, targetHeight, clipType, enableUpscale);
     }
 }

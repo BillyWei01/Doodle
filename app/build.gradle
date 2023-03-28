@@ -39,9 +39,13 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
+    // Decoding library
+    implementation 'com.caverock:androidsvg-aar:1.4'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.20'
+
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+
     // implementation 'com.squareup.okhttp3:okhttp:4.1.1'
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'io.github.billywei01:fastkv-java:1.1.4'

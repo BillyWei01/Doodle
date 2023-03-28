@@ -18,6 +18,7 @@ public final class DecodingInfo {
     public final int targetWidth;
     public final int targetHeight;
     public final ClipType clipType;
+    public final boolean enableUpscale;
     public final DecodeFormat decodeFormat;
     public final Map<String, String> options;
 
@@ -30,6 +31,7 @@ public final class DecodingInfo {
         targetWidth = request.targetWidth;
         targetHeight = request.targetHeight;
         clipType = request.clipType;
+        enableUpscale = request.enableUpscale;
         decodeFormat = request.decodeFormat;
         options = request.options;
     }

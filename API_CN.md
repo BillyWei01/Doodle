@@ -19,6 +19,7 @@ void notifyResume(Object) | 发送resume事件。
 void notifyDestroy(Object) | 发送destroy事件。
 void trimMemory(int) | 缩减内存缓存。
 void clearMemory() | 清除LruCache中的所有bitmap。
+float getScale(...) | 以原图宽高和解码参数计算缩放因子。
 
 # 三、Config（全局配置）
 

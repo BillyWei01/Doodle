@@ -46,6 +46,7 @@
         <activity android:name=".main.test.TestHttpActivity" />
         <activity android:name=".main.test.TestRotatedActivity" />
         <activity android:name=".main.test.TestTransformationActivity" />
+        <activity android:name=".main.test.TestSvgActivity" />
 
     </application>
 </manifest>

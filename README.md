@@ -28,7 +28,7 @@ The functions implemented by Doodle include but are not limited to the following
 
 ### Download
 ```gradle
-implementation 'io.github.billywei01:doodle:2.0.2'
+implementation 'io.github.billywei01:doodle:2.0.3'
 ```
 
 ### Global Config

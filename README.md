@@ -11,16 +11,16 @@ Doodle is not depend on third-party libraries, not require annotations and confi
 The functions implemented by Doodle include but are not limited to the following list:
 
 - Support loading files in the form of File, Uri, Resource(raw/drawable), assets, http, etc.;
-- Support static pictures, dynamic pictures, video thumbnails;
+- Support static iamges, dynamic images, and taking video frames;
 - Support the acceleration of loading media thumbnails;
 - Support custom data loading;
-- Support custom decoding implementation;
-- Support custom image transformation;
-- Support monitoring the life cycle and do correspond processing (such as canceling the loading when the page ends);
+- Support custom decoding;
+- Support custom transformation;
+- Support observing lifecycle of activity to take actions (For example: Canceling the loading when the activity destroyed);
 - Support pause/resume loading;
-- Support disk caching (including caching original files and decoding results);
+- Support disk cache (including source cache and result cache);
 - Support memory cache (including LRU cache and weak reference cache);
-- Support placeholder images and animations;
+- Support setting placeholder and animations;
 - Supports down-sampling/up-sampling, clipping...
 
 

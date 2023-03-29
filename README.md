@@ -5,23 +5,23 @@ Doodle is a lightweight, efficient and powerful image loading library for Androi
 
 Doodle's aar package is only 93K, much smaller than Glide/Fresco.
 
-Doodle is not depend on third-party libraries, not require annotations and configuration confusion,
- very easy to use.
+Doodle is not depend on third-party libraries, not require annotations and confusion configuration,
+ it's very easy to use.
 
 The functions implemented by Doodle include but are not limited to the following list:
 
-- Support loading files in the form of File, Uri, Resource(raw/drawable), assets, http, etc.;
-- Support static iamges, dynamic images, and taking video frames;
-- Support the acceleration of loading media thumbnails;
-- Support custom data loading;
-- Support custom decoding;
-- Support custom transformation;
-- Support observing lifecycle of activity to take actions (For example: Canceling the loading when the activity destroyed);
-- Support pause/resume loading;
-- Support disk cache (including source cache and result cache);
-- Support memory cache (including LRU cache and weak reference cache);
-- Support setting placeholder and animations;
-- Supports down-sampling/up-sampling, clipping...
+- Support loading images with File, Uri, Resource(raw/drawable), assets, http, etc.
+- Support static iamges, animated images, and taking video frames.
+- Support the acceleration of loading media thumbnails.
+- Support custom data loading.
+- Support custom decoding.
+- Support custom transformation.
+- Support observing lifecycle of activity to take actions (For example: Canceling the loading when the activity destroyed).
+- Support pause/resume loading.
+- Support disk cache (including source cache and result cache).
+- Support memory cache (including LRU cache and weak reference cache).
+- Support setting placeholder and animations.
+- Supports down-sampling/up-sampling, clipping.
 
 
 ## Getting Start
@@ -78,8 +78,8 @@ Preload:
 Doodle.load(path).preload()
 ```
 
-Loading image with Doodle ，start from load()，end with into(), get() or preload().<br/>
-After the load(), more parameters can be added.
+Loading image with Doodle ，start from 'load()'，end with 'into()', 'get()' or 'preload()'.<br/>
+After the 'load()' method, more parameters can be added.
 You can check [API](API.md) for more detail.
 
 

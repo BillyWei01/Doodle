@@ -1,5 +1,5 @@
 
-# Doodle（框架入口）
+# 一、Doodle（框架入口）
 
 方法 | 描述
 ---|---
@@ -21,11 +21,11 @@ void trimMemory(int) | 缩减内存缓存。
 void clearMemory() | 清除LruCache中的所有bitmap。
 float getScale(...) | 以原图宽高和解码参数计算缩放因子。
 
-# 三、Config（全局配置）
+# 二、Config（全局配置）
 
 方法 | 描述
 ---|---
-setExecutor(Executor executor) | 设置Executor。<br/>APP中如果每个组件都创建自己的线程池并且保持核心线程存活，那整个APP的存活线程就很多了，容易导致OOM。<br/>故此，编写框架的时候，最好留一个接口给调用者传入Executor, 这样APP可以统一管理线程，框架可以复用APP的线程池。<br/>Doodle内部会套队列来控制任务的并发量。
+setExecutor(Executor executor) | 设置Executor。<br/>APP中如果每个组件都创建自己的线程池并且保持核心线程存活，那整个APP的存活线程就很多了，容易导致OOM。<br/>故此，Doodle提供一个接口给调用者传入Executor, 这样APP可以统一管理线程，框架可以复用APP的线程池。<br/>注：Doodle内部会套队列来控制任务的并发量。
 setLogger(DLogger logger) | 设置Logger。通过Log可以观察一些运行情况，输出错误日志等。
 setCachePath(String) | 设置结果缓存的存储路径。如果不设定，会默认在内部目录的cache目录下创建子目录。
 setResultMaxCount(int) | 设置果缓存最大数量，默认8192。
@@ -40,11 +40,11 @@ addDrawableDecoders(DrawableDecoder) | 添加自定义DrawableDecoder。
 addBitmapDecoders(BitmapDecoder) | 添加自定义BitmapDecoder。
 
 
-# Request（加载请求）
+# 三、Request（加载请求）
 
 方法 | 描述
 ---|---
-sourceKey(String) | 设置数据源的key。<br/> path默认情况下作为CacheKey的一部分. 如果sourceKey不为空，Doodle回用sourceKey替换path作为CacheKey的一部分。
+sourceKey(String) | 设置数据源的key。<br/> path默认情况下作为CacheKey的一部分. 如果sourceKey不为空，Doodle会用sourceKey替换path作为CacheKey的一部分。
 override(int, int) | 指定目标尺寸。
 scaleType(ImageView.ScaleType) | 指定缩放类型。 <br/> 如果未设定，且target为ImageView，则会自动从ImageView获取。
 clipType(ClipType) | ClipType 是自定义缩放类型枚举，大部分定义和ScaleType重叠，有少量增删。

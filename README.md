@@ -5,8 +5,8 @@ Doodle is a lightweight, efficient and powerful image loading library for Androi
 
 Doodle's aar package is only 93K, much smaller than Glide/Fresco.
 
-Doodle is not depend on third-party libraries, not require annotations and confusion configuration,
- it's very easy to use.
+Doodle is not depend on third-party libraries, not require annotations , no need to configure proguard obfuscation.<br>
+In brief, It's easy to use.
 
 The functions implemented by Doodle include but are not limited to the following list:
 
@@ -78,9 +78,8 @@ Preload:
 Doodle.load(path).preload()
 ```
 
-Loading image with Doodle ，start from 'load()'，end with 'into()', 'get()' or 'preload()'.<br/>
-After the 'load()' method, more parameters can be added.
-You can check [API](API.md) for more detail.
+When loading images with Doodle，start from "load"，end with "into", "get" or "preload".<br/>
+After the "load" method, you could apply more options, check [API](API.md) for more details.
 
 
 ## License

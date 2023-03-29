@@ -21,12 +21,12 @@ void clearMemory() | Remove all bitmap from LruCache.
 float getScale(...) | Calculate the scale factor by source size and decoding info.
 
 
-## Config (Global Configuration)
+## Config (Global Configurations)
 
 Method | Description
 ---|---
-setExecutor(Executor executor) |Config executor.<br/>If each component in the APP creates its own thread pool and keeps the core threads alive, then there will be a lot of alive threads in the entire APP, which will easily lead to OOM. Therefore, when writing the framework, it will be better to provide an interface for user to pass in an Executor. In that way, the APP can manage threads uniformly, and the framework can reuse the thread pool of the APP. 
-setLogger(DLogger logger) | Set up Logger.
+setExecutor(Executor executor) |Set an executor.<br/>If each component in the APP creates its own thread pool and keeps the core threads alive, there will be a lot of threads in the entire APP, which will easily lead to OOM. Doodle provide an interface for user to pass in an Executor. In that way, the APP can manage threads uniformly, and Doodle can reuse thread pool of the APP. 
+setLogger(DLogger logger) | Set Logger.
 setCachePath(String) | Set the storage path of the result cache.
 setResultMaxCount(int) | Set the maximum number of result caches.
 setResultCapacity(long) | Set the capacity of the result cache.
@@ -40,15 +40,15 @@ addDrawableDecoders(DrawableDecoder) | Add custom DrawableDecoder.
 addBitmapDecoders(BitmapDecoder) | Add custom BitmapDecoder.
 
 
-## Request (Single Request)
+## Request (Loading parameters)
 
 Method | Description
 ---|---
 sourceKey(String) | Set the key of the data source. <br/> By default, the path is part of the CacheKey, Doodle will use 'sourceKey' instead of 'path' as part of CacheKey if it is not empty.
 override(int, int) | Assigned width and height of target.
 scaleType(ImageView.ScaleType) | Set scale type。 <br/> If not set, and the target is ImageView, it will be automatically extract from ImageView.
-clipType(ClipType) | ClipType ClipType is an enumeration of custom zoom types, most definitions overlap with ScaleType, with a few additions and deletions.
-enableUpscale() | By default, Doodle decodes image files with down-sampling strategy. Call this method if you need up-sampling strategy.
+clipType(ClipType) | ClipType is an enumeration of scale types, most definitions overlap with ScaleType, with a few additions and deletions.
+enableUpscale() | By default, Doodle decodes image with down-sampling strategy. Call this method if you need up-sampling strategy.
 memoryCacheStrategy(MemoryCacheStrategy) | Set the memory cache strategy，LRU strategy by default。
 diskCacheStrategy(DiskCacheStrategy) | Set disk caching strategy.
 noCache() | No to cache, including disk cache and memory cache.

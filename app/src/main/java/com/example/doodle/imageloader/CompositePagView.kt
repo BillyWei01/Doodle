@@ -5,6 +5,7 @@ import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import io.github.doodle.interfaces.CustomView
@@ -22,8 +23,9 @@ class CompositePagView @JvmOverloads constructor(
     private val pagView: PAGView = PAGView(context)
 
     init {
-        addView(imageView)
-        addView(pagView)
+        val params = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        addView(imageView, params)
+        addView(pagView, params)
     }
 
     override fun start() {
@@ -53,7 +55,7 @@ class CompositePagView @JvmOverloads constructor(
             imageView.visibility = View.GONE
             pagView.visibility = View.VISIBLE
             pagView.composition = result
-            pagView.setRepeatCount(1000)
+            pagView.setRepeatCount(0)
         }
     }
 }

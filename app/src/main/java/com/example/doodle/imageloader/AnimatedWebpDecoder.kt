@@ -7,12 +7,12 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import io.github.doodle.DecodingInfo
 import io.github.doodle.enums.MediaType
-import io.github.doodle.interfaces.DrawableDecoder
+import io.github.doodle.interfaces.AnimatedDecoder
 import java.nio.ByteBuffer
 import kotlin.math.roundToInt
 
-object AnimatedWebpDecoder : DrawableDecoder {
-    override fun decode(info: DecodingInfo): Drawable? {
+object AnimatedWebpDecoder : AnimatedDecoder {
+    override fun decode(info: DecodingInfo): Any? {
         if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && info.mediaType == MediaType.WEBP_ANIMATED)) {
             return null
         }

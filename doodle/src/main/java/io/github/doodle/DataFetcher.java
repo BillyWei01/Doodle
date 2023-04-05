@@ -132,6 +132,10 @@ class DataFetcher implements Closeable {
         return mediaType;
     }
 
+    String getFilePath() {
+        return (loader instanceof FileLoader) ? ((FileLoader) loader).filePath : null;
+    }
+
     boolean possiblyExif() throws IOException {
         return ExifHelper.possiblyExif(getHeader());
     }
@@ -218,10 +222,12 @@ class DataFetcher implements Closeable {
     private static class FileLoader implements DataLoader {
         private final RandomAccessFile accessFile;
         private final FileDescriptor fd;
+        final String filePath;
 
         FileLoader(File file) throws IOException {
             accessFile = new RandomAccessFile(file, "r");
             fd = accessFile.getFD();
+            filePath = file.getPath();
         }
 
         @Override

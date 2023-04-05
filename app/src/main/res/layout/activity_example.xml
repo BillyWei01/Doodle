@@ -1,60 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/test_asset_btn"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/test_asset" />
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
-    <Button
-        android:id="@+id/test_gif_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/test_gif" />
+        <Button
+            android:id="@+id/test_asset_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/test_asset" />
 
-    <Button
-        android:id="@+id/test_svg_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/test_svg" />
+        <Button
+            android:id="@+id/test_gif_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/test_gif" />
 
-    <Button
-        android:id="@+id/test_animated_webp_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        android:text="@string/test_animated_webp" />
+        <Button
+            android:id="@+id/test_svg_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/test_svg" />
 
-    <Button
-        android:id="@+id/test_http_btn"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/test_http" />
+        <Button
+            android:id="@+id/test_pag_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/test_pag" />
 
-    <Button
-        android:id="@+id/test_rotated_btn"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/test_rotated" />
+        <Button
+            android:id="@+id/test_animated_webp_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/test_animated_webp"
+            android:visibility="gone" />
 
-    <Button
-        android:id="@+id/test_transformation_btn"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/test_transformation" />
+        <Button
+            android:id="@+id/test_http_btn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/test_http" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/test_rotated_btn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/test_rotated" />
+
+        <Button
+            android:id="@+id/test_transformation_btn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/test_transformation" />
+
+    </LinearLayout>
+</ScrollView>

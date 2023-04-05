@@ -63,4 +63,15 @@ public final class DecodingInfo {
     public byte[] getData() throws IOException {
         return getDataFetcher().getData();
     }
+
+    /**
+     * Return file path in two cases: <br>
+     * 1. The source file is a local file with schema "file". <br>
+     * 2. The source file is a remote file and had been downloaded. <br>
+     *
+     * @return path of file, or null.
+     */
+    public String getFilePath() throws IOException {
+        return getDataFetcher().getFilePath();
+    }
 }

@@ -36,7 +36,7 @@ setMemoryCacheCapacity(long) | 设置内存缓存的容量，默认为maxMemory�
 setCompressFormat(Bitmap.CompressFormat) | 设置结果缓存的压缩格式。<br/>如果不设定默认压缩格式，Doodle会根据解码格式(RGB_8888/RGB_565），文件类型，以及系统版本决定用哪一种压缩格式。
 setHttpSourceFetcher(HttpSourceFetcher) | Doodle内置了下载http文件的代码，用SDK自带的HttpURLConnection实现。<br/> 如果需要用自己的下载方法，实现HttpSourceFetcher并调此方法注入即可。
 addDataParser(DataParser) | 添加DataParser，用于自定义数据获取。
-addDrawableDecoders(DrawableDecoder) | 添加自定义DrawableDecoder。
+addAnimatedDecoders(AnimatedDecoder) | 添加自定义AnimatedDecoder。
 addBitmapDecoders(BitmapDecoder) | 添加自定义BitmapDecoder。
 
 
@@ -55,7 +55,7 @@ noCache() | 不做任何缓存，包括磁盘缓存和内存缓存。
 onlyIfCached(boolean) | 指定网络请求是否只从缓存读取（原图缓存）。
 decodeFormat(DecodeFormat) | 设置解码格式，默认ARGB_8888。
 transform(Transformation) | 设置解码后的图片变换（圆形剪裁，圆角，灰度，模糊等），可以连续调用（会按顺序执行）。<br/>Doodle内置了圆形剪裁和圆角两种Transformation。
-keepOriginalDrawable() | 默认情况下请求开始会先清空ImageView之前的Drawable, 调用此方法后会保留之前的Drawable，直到加载结束。
+keepOriginalDrawable() | 默认情况下请求开始会先清空View之前的Drawable, 调用此方法后会保留之前的Drawable，直到加载结束。
 placeholder(int) | 设置占位图，在结果加载完成之前会显示此drawable。
 placeholder(Drawable) | 同上。
 error(int) | 设置加载失败后的占位图。

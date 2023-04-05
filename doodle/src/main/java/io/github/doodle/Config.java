@@ -20,7 +20,7 @@ public final class Config {
     static Bitmap.CompressFormat defaultCompressFormat;
     static HttpSourceFetcher httpSourceFetcher;
     static List<DataParser> dataParsers;
-    static List<DrawableDecoder> drawableDecoders;
+    static List<AnimatedDecoder> animatedDecoders;
     static List<BitmapDecoder> bitmapDecoders;
 
     static final Config INSTANCE = new Config();
@@ -60,12 +60,12 @@ public final class Config {
         return this;
     }
 
-    public Config addDrawableDecoders(DrawableDecoder decoder) {
+    public Config addAnimatedDecoders(AnimatedDecoder decoder) {
         if (decoder != null) {
-            if (drawableDecoders == null) {
-                drawableDecoders = new ArrayList<>(1);
+            if (animatedDecoders == null) {
+                animatedDecoders = new ArrayList<>(1);
             }
-            drawableDecoders.add(decoder);
+            animatedDecoders.add(decoder);
         }
         return this;
     }

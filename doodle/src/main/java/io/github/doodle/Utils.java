@@ -10,7 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.ImageView;
+import android.view.View;
 
 import java.util.Arrays;
 
@@ -142,7 +142,7 @@ final class Utils {
         return false;
     }
 
-    static Activity pickActivity(ImageView view) {
+    static Activity pickActivity(View view) {
         Context context = view.getContext();
         if (context instanceof Activity) {
             return (Activity) context;

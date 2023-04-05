@@ -11,10 +11,11 @@ In brief, It's easy to use.
 The functions implemented by Doodle include but are not limited to the following list:
 
 - Support loading images with File, Uri, Resource(raw/drawable), assets, http, etc.
-- Support static iamges, animated images, and taking video frames.
+- Support static images, animated images, and taking video frames.
 - Support the acceleration of loading media thumbnails.
 - Support custom data loading.
 - Support custom decoding.
+- Support applying result to custom view.
 - Support custom transformation.
 - Support observing lifecycle of activity to take actions (For example: Canceling the loading when the activity destroyed).
 - Support pause/resume loading.
@@ -28,7 +29,7 @@ The functions implemented by Doodle include but are not limited to the following
 
 ### Download
 ```gradle
-implementation 'io.github.billywei01:doodle:2.0.3'
+implementation 'io.github.billywei01:doodle:2.1.0'
 ```
 
 ### Global Config
@@ -37,22 +38,20 @@ Doodle.config()
     .setLogger(Logger)
     .setExecutor(IOExecutor)
     .setHttpSourceFetcher(OkHttpSourceFetcher)
-    .addDrawableDecoders(GifDecoder)
+    .addAnimatedDecoders(GifDecoder)
 ```
 
 Any option in the global configuration is optional
 
 ### Image Loading
-Doodle's API for loading images is similar to Picasso/Glide.
 
-Basic usage, load image to ImageView:
+1. Load image to View (ImageView or custom View)
 
 ```java
-Doodle.load(path).into(imageView)
+Doodle.load(path).into(view)
 ```
 
-If the target is not an ImageView, you can get the result by callback, and apply the result to your target.
-The result of Doodle currently can be only three cases: Bitmap, Drawable or null.
+2. Get the result by callback
 
 ```java
 Doodle.load(path).into(result -> {
@@ -61,18 +60,18 @@ Doodle.load(path).into(result -> {
     } else if (result instanceof Drawable) {
         // handle drawable
     } else { 
-        // handle null
+        // handle result with other type or null
     }
 });
 ```
 
-Get bitmap directly:
+3. Get bitmap
 
 ```java
 Bitmap bitmap = Doodle.load(path).get()
 ```
 
-Preload:
+4. Preload
 
 ```java
 Doodle.load(path).preload()

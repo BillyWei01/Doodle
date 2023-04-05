@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
@@ -59,7 +60,7 @@ public final class Request {
     // Target
     Request.Waiter waiter;
     SimpleTarget simpleTarget;
-    WeakReference<ImageView> targetReference;
+    WeakReference<View> viewReference;
 
     WeakReference<Worker> workerReference;
 
@@ -233,7 +234,7 @@ public final class Request {
     }
 
     /**
-     * Keep original drawable in ImageView(target) util we get the result of request.
+     * Keep original drawable in target view util we get the result of request.
      */
     public Request keepOriginalDrawable(boolean keep) {
         keepOriginal = keep;
@@ -302,7 +303,7 @@ public final class Request {
     }
 
     /**
-     * If there are {@link io.github.doodle.interfaces.DrawableDecoder} in {@link Config#drawableDecoders},
+     * If there are {@link io.github.doodle.interfaces.AnimatedDecoder} in {@link Config#animatedDecoders},
      * Doodle will call the DrawableDecoder to at first to see if the source file could be decode into Drawable.
      * DrawableDecoder may return some AnimatedDrawable if the format of file is gif or animated webp.
      * <p>
@@ -320,7 +321,7 @@ public final class Request {
     }
 
     /**
-     * If host is Activity and target is ImageView,
+     * If the host is Activity and the target is View,
      * it's not necessary to call this,
      * because Doodle will pick the activity automatically by {@link Utils#pickActivity}
      * <p>
@@ -361,7 +362,7 @@ public final class Request {
      * Request handle DrawableDecoder at first if {@link #enableDrawable} is true.
      * You could call this method if you need to handle the image file by a specify BitmapDecoder.
      */
-    public Request setBitmapDecoder(BitmapDecoder decoder){
+    public Request setBitmapDecoder(BitmapDecoder decoder) {
         bitmapDecoder = decoder;
         return this;
     }
@@ -429,8 +430,8 @@ public final class Request {
     /**
      * Listen if success to get result.
      * <p>
-     * Only callback when the target is ImageView,
-     * Invoke after updating target(ImageView).
+     * Only callback when the target is View,
+     * Invoke after updating target view.
      *
      * @param listener RequestListener
      */
@@ -439,29 +440,39 @@ public final class Request {
         return this;
     }
 
+    public void into(CustomView customView) {
+        if (customView instanceof View) {
+            loadToView((View) customView);
+        } else {
+            throw new IllegalArgumentException("The customView should be instance of View");
+        }
+    }
+
     /**
      * Load bitmap into ImageView.
      *
-     * @param target ImageView
+     * @param imageView ImageView
      */
-    public void into(ImageView target) {
-        if (target == null) {
+    public void into(ImageView imageView) {
+        if (imageView == null) {
             return;
         }
-        targetReference = new WeakReference<>(target);
-
         if (clipType == ClipType.NOT_SET) {
-            clipType = ClipType.mapScaleType(target.getScaleType());
+            clipType = ClipType.mapScaleType(imageView.getScaleType());
         }
+        loadToView(imageView);
+    }
 
+    private void loadToView(View view) {
+        viewReference = new WeakReference<>(view);
         if (clipType == ClipType.NO_CLIP) {
             fillSizeAndLoad(0, 0);
         } else if (targetWidth > 0 && targetHeight > 0) {
             fillSizeAndLoad(targetWidth, targetHeight);
-        } else if (target.getWidth() > 0 && target.getHeight() > 0) {
-            fillSizeAndLoad(target.getWidth(), target.getHeight());
-        } else if (isParamsValid(target.getLayoutParams())) {
-            ViewGroup.LayoutParams params = target.getLayoutParams();
+        } else if (view.getWidth() > 0 && view.getHeight() > 0) {
+            fillSizeAndLoad(view.getWidth(), view.getHeight());
+        } else if (isParamsValid(view.getLayoutParams())) {
+            ViewGroup.LayoutParams params = view.getLayoutParams();
             int pw = params.width;
             int ph = params.height;
             // If both width and height is wrap_content, load with original size
@@ -472,14 +483,14 @@ public final class Request {
                 int h = ph > 0 ? ph : Utils.getDisplayDimens().y;
                 fillSizeAndLoad(w, h);
             }
-        } else if (target.getWindowToken() != null) {
+        } else if (view.getWindowToken() != null) {
             fillSizeAndLoad(0, 0);
         } else {
-            target.getViewTreeObserver().addOnPreDrawListener(
+            view.getViewTreeObserver().addOnPreDrawListener(
                     new ViewTreeObserver.OnPreDrawListener() {
                         @Override
                         public boolean onPreDraw() {
-                            ImageView view = targetReference.get();
+                            View view = viewReference.get();
                             if (view == null) {
                                 return true;
                             }
@@ -514,8 +525,8 @@ public final class Request {
             targetHeight = 0;
         }
 
-        if (targetReference != null) {
-            ImageView target = targetReference.get();
+        if (viewReference != null) {
+            View target = viewReference.get();
             if (target != null && clipType != ClipType.NO_CLIP) {
                 int horizonPadding = target.getPaddingLeft() + target.getPaddingRight();
                 int verticalPadding = target.getPaddingTop() + target.getPaddingBottom();
@@ -528,7 +539,11 @@ public final class Request {
             }
         }
 
-        Controller.start(this);
+        try {
+            Controller.start(this);
+        } catch (Throwable e) {
+            LogProxy.e("Doodle", e);
+        }
     }
 
     CacheKey getKey() {

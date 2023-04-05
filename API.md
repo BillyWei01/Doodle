@@ -36,7 +36,7 @@ setMemoryCacheCapacity(long) | Set the capacity of memory cache, the default is 
 setCompressFormat(Bitmap.CompressFormat) | Sets the compression format for the result cache. <br/>If the default compression format is not set, Doodle will decide which compression format to use according to the decoding format (RGB_8888/RGB_565), file type, and system version.
 setHttpSourceFetcher(HttpSourceFetcher) | Doodle has a built-in downloader, which is implemented with the HttpURLConnection. <br/> If you need to use your own downloader, implement HttpSourceFetcher and inject with this method.
 addDataParser(DataParser) | Add DataParser for custom data fetching.
-addDrawableDecoders(DrawableDecoder) | Add custom DrawableDecoder.
+addAnimatedDecoders(AnimatedDecoder) | Add custom AnimatedDecoder.
 addBitmapDecoders(BitmapDecoder) | Add custom BitmapDecoder.
 
 

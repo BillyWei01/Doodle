@@ -12,6 +12,7 @@ Doodle实现的功能包括但不限于以下列表：
 - 支持加载媒体文件缩略图的加速（读取系统的thumbnail)；
 - 支持自定义数据加载；
 - 支持自定义解码实现；
+- 支持加载到自定义的View;
 - 支持自定义图片变换（内置圆形和圆角剪裁）；
 - 支持监听生命周期，并做对应处理（如页面结束时取消加载）；
 - 支持暂停/恢复加载；
@@ -20,12 +21,15 @@ Doodle实现的功能包括但不限于以下列表：
 - 支持占位图，动画；
 - 支持降采样/上采样，剪裁……
 
+BitmapFactory本身可以解码JPG, PNG, WEBP,静态GIF等图片格式，高版本Android还支持HEIF格式。<br/>
+通过自定义解码，可以实现处理任意格式的文件。<br/>
+本项目的测试用例中实现了GIF, SVG, PAG以及动态WEBP等格式的解码。
 
 ## 使用方法
 
 ### 下载
 ```gradle
-implementation 'io.github.billywei01:doodle:2.0.3'
+implementation 'io.github.billywei01:doodle:2.1.0'
 ```
 
 ### 全局配置
@@ -34,38 +38,36 @@ Doodle.config()
     .setLogger(Logger)
     .setExecutor(IOExecutor)
     .setHttpSourceFetcher(OkHttpSourceFetcher)
-    .addDrawableDecoders(GifDecoder)
+    .addAnimatedDecoders(GifDecoder)
 ```
 全局配置中的各个选项都是可选的（可以不设置）。
 
 ### 图片加载
-Doodle加载图片的API和Picasso/Glide相似。
 
-基本用法，加载图片到ImageView:
+1. 加载图片到View (ImageView或者自定义的View)
 ```java
-Doodle.load(path).into(imageView)
+Doodle.load(path).into(view)
 ```
 
-或者，如果target不是ImageView, 可以通过接口回调result，在将结果应用到所需要的target。<br/>
-Doodle的result目前只有三种情况，Bitmap，Drawable或者null。
+2. 通过接口回调result
 ```java
 Doodle.load(path).into(result -> {
     if (result instanceof Bitmap) {
         // handle bitmap
     } else if (result instanceof Drawable) {
         // handle drawable
-    } else { 
-        // handle null
+    } else {
+        // handle result with other type or null
     }
 });
 ```
 
-或者直接获取bitmap:
+3. 直接获取bitmap
 ```java
 Bitmap bitmap = Doodle.load(path).get()
 ```
 
-或者仅预加载：
+4. 预加载
 ```java
 Doodle.load(path).preload()
 ```

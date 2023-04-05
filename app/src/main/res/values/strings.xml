@@ -9,6 +9,7 @@
     <string name="test_asset">Test asset</string>
     <string name="test_gif">Test gif</string>
     <string name="test_svg">Test svg</string>
+    <string name="test_pag">Test pag</string>
     <string name="test_animated_webp">Test Animated Webp</string>
     <string name="test_http">Test http</string>
     <string name="test_rotated">Test rotated</string>

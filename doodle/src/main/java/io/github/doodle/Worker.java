@@ -1,11 +1,10 @@
 package io.github.doodle;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.util.Log;
-import android.widget.ImageView;
-import android.graphics.drawable.BitmapDrawable;
+import android.view.View;
 
 import java.io.*;
 import java.lang.ref.WeakReference;
@@ -29,14 +28,14 @@ final class Worker extends ExAsyncTask {
     private long time;
     private static final AtomicInteger count = new AtomicInteger();
 
-    Worker(Request request, ImageView imageView) {
+    Worker(Request request, View view) {
         this.request = request;
         if (LogProxy.isDebug()) {
             Log.d(TAG, "Loading start, count:" + count.incrementAndGet());
         }
-        if (imageView != null) {
+        if (view != null) {
             request.workerReference = new WeakReference<>(this);
-            imageView.setTag(R.id.doodle_view_tag, request);
+            view.setTag(R.id.doodle_view_tag, request);
         }
     }
 
@@ -56,7 +55,7 @@ final class Worker extends ExAsyncTask {
         DecodingInfo decodingInfo = null;
         CacheKey key = request.getKey();
         try {
-            if (request.targetReference != null && getTarget() == null) {
+            if (request.viewReference != null && getTarget() == null) {
                 // Target missed or changed request
                 return null;
             }
@@ -81,11 +80,11 @@ final class Worker extends ExAsyncTask {
                     bitmap = request.bitmapDecoder.decode(decodingInfo);
                     bitmap = Decoder.handleScaleAndCrop(bitmap, request);
                 }
-                if (bitmap == null && request.enableDrawable && Config.drawableDecoders != null) {
+                if (bitmap == null && request.enableDrawable && Config.animatedDecoders != null) {
                     Object result = tryDrawableDecoders(decodingInfo);
                     if (result != null) {
                         if (result instanceof Bitmap) {
-                            bitmap = (Bitmap) result;
+                            bitmap = Decoder.handleScaleAndCrop((Bitmap) result, request);
                         } else {
                             return result;
                         }
@@ -149,16 +148,16 @@ final class Worker extends ExAsyncTask {
         return bitmap;
     }
 
+
     private Object tryDrawableDecoders(DecodingInfo decodingInfo) {
-        for (DrawableDecoder decoder : Config.drawableDecoders) {
-            Drawable drawable = decoder.decode(decodingInfo);
-            if (drawable != null) {
-                if (drawable instanceof BitmapDrawable) {
+        for (AnimatedDecoder decoder : Config.animatedDecoders) {
+            Object result = decoder.decode(decodingInfo);
+            if (result != null) {
+                if (result instanceof BitmapDrawable) {
                     // Extract the bitmap for caching, to speed up next loading
-                    Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                    return Decoder.handleScaleAndCrop(bitmap, request);
+                    return ((BitmapDrawable) result).getBitmap();
                 } else {
-                    return drawable;
+                    return result;
                 }
             }
         }
@@ -178,26 +177,29 @@ final class Worker extends ExAsyncTask {
     @Override
     protected void onCancelled() {
         logStatus("cancel");
-        ImageView imageView = getTarget();
-        clearImageView(imageView);
+        clearView(getTarget());
         request.simpleTarget = null;
         request.listener = null;
-        request.targetReference = null;
+        request.viewReference = null;
         request.workerReference = null;
     }
 
     @Override
     protected void onPostExecute(Object result) {
         logStatus("finish");
-        ImageView imageView = getTarget();
-        clearImageView(imageView);
-        Controller.setResult(request, imageView, result, fromMemory);
+        View view = getTarget();
+        clearView(view);
+        try {
+            Controller.setResult(request, view, result, fromMemory);
+        } catch (Throwable e) {
+            LogProxy.e(TAG, e);
+        }
     }
 
-    private void clearImageView(ImageView imageView) {
-        if (imageView != null) {
-            imageView.setTag(R.id.doodle_view_tag, null);
-            Controller.stopAnimDrawable(imageView);
+    private void clearView(View view) {
+        if (view != null) {
+            view.setTag(R.id.doodle_view_tag, null);
+            Controller.stopAnimDrawable(view);
         }
     }
 
@@ -208,13 +210,13 @@ final class Worker extends ExAsyncTask {
         }
     }
 
-    private ImageView getTarget() {
-        WeakReference<ImageView> targetRef = request.targetReference;
-        if (targetRef != null) {
-            ImageView imageView = targetRef.get();
-            if (imageView != null) {
-                if (imageView.getTag(R.id.doodle_view_tag) == request) {
-                    return imageView;
+    private View getTarget() {
+        WeakReference<View> viewRef = request.viewReference;
+        if (viewRef != null) {
+            View view = viewRef.get();
+            if (view != null) {
+                if (view.getTag(R.id.doodle_view_tag) == request) {
+                    return view;
                 }
             }
         }

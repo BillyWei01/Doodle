@@ -25,6 +25,10 @@ class ExampleActivity : BaseActivity() {
             startActivity(TestSvgActivity::class.java)
         }
 
+        test_pag_btn.onClick {
+            startActivity(TestPagActivity::class.java)
+        }
+
         // ImageDecoder available on Android P.
         // ImageDecoder support decoding animated webp image.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

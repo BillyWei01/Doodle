@@ -10,6 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import io.github.doodle.interfaces.CustomView;
+
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 import java.util.LinkedHashMap;
@@ -23,7 +25,7 @@ final class Controller {
     private static final String TAG = "Controller";
 
     private static volatile boolean pauseFlag = false;
-    private static final LinkedHashMap<ImageView, Request> requests = new LinkedHashMap<>();
+    private static final LinkedHashMap<View, Request> requests = new LinkedHashMap<>();
 
     private static final AttachListener attachListener = new AttachListener();
 
@@ -45,7 +47,7 @@ final class Controller {
         requests.clear();
     }
 
-    private static synchronized void cacheRequest(Request request, ImageView target) {
+    private static synchronized void cacheRequest(Request request, View target) {
         // If the target had paused request before, cover it with new request.
         // That's useful for RecycleView scrolling.
         requests.put(target, request);
@@ -54,19 +56,19 @@ final class Controller {
     /**
      * @return true if the ImageView has already bound a same request.
      */
-    private static boolean checkTag(Request request, ImageView imageView) {
-        Object tag = imageView.getTag(R.id.doodle_view_tag);
+    private static boolean checkTag(Request request, View view) {
+        Object tag = view.getTag(R.id.doodle_view_tag);
         if (tag instanceof Request) {
             Request preRequest = (Request) tag;
             if (request.getKey().equals(preRequest.getKey())) {
                 return true;
             } else {
-                WeakReference<ImageView> targetRef = preRequest.targetReference;
-                if (targetRef != null) {
-                    stopAnimDrawable(targetRef.get());
-                    preRequest.targetReference = null;
+                WeakReference<View> viewRef = preRequest.viewReference;
+                if (viewRef != null) {
+                    stopAnimDrawable(viewRef.get());
+                    preRequest.viewReference = null;
                 }
-                // If tag not equal, cancel previous request which binds to imageView.
+                // If tag not equal, cancel previous request which binds to view.
                 WeakReference<Worker> workerRef = preRequest.workerReference;
                 if (workerRef != null) {
                     preRequest.workerReference = null;
@@ -83,10 +85,10 @@ final class Controller {
         return false;
     }
 
-    private static ImageView prepareImageView(Request request) {
-        ImageView imageView = request.targetReference.get();
-        if (imageView != null) {
-            Activity activity = Utils.pickActivity(imageView);
+    private static View prepareView(Request request) {
+        View view = request.viewReference.get();
+        if (view != null) {
+            Activity activity = Utils.pickActivity(view);
             if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
                 LogProxy.e(TAG, new Exception("Activity not available"));
                 return null;
@@ -94,29 +96,33 @@ final class Controller {
             if (request.hostHash == 0) {
                 request.hostHash = System.identityHashCode(activity);
             }
-            if (checkTag(request, imageView)) {
+            if (checkTag(request, view)) {
                 return null;
             }
             if (!request.keepOriginal) {
-                imageView.setImageDrawable(null);
+                if (view instanceof ImageView) {
+                    ((ImageView) view).setImageDrawable(null);
+                } else if (view instanceof CustomView) {
+                    ((CustomView) view).setDrawable(null);
+                }
             }
-            imageView.setTag(R.id.doodle_view_tag, null);
+            view.setTag(R.id.doodle_view_tag, null);
         }
-        return imageView;
+        return view;
     }
 
     static void start(Request request) {
-        ImageView imageView = null;
-        if (request.targetReference != null) {
-            imageView = prepareImageView(request);
-            if (imageView == null) {
+        View view = null;
+        if (request.viewReference != null) {
+            view = prepareView(request);
+            if (view == null) {
                 return;
             }
         }
 
         // If source is invalid, just callback and return
         if (TextUtils.isEmpty(request.path)) {
-            abort(request, imageView);
+            abort(request, view);
             return;
         }
 
@@ -128,25 +134,25 @@ final class Controller {
             return;
         }
 
-        if (imageView != null) {
+        if (view != null) {
             if (bitmap != null) {
-                setBitmap(request, imageView, bitmap, true);
+                setBitmap(request, view, bitmap, true);
             } else {
-                setPlaceholder(request, imageView);
-                Drawable placeholder = imageView.getDrawable();
+                setPlaceholder(request, view);
+                Drawable placeholder = getDrawable(view);
                 if (placeholder instanceof Animatable && !pauseFlag) {
-                    startAnimDrawable(imageView, (Animatable) placeholder);
+                    startAnimate(view, (Animatable) placeholder);
                 }
             }
         }
 
-        if (bitmap == null && imageView != null && pauseFlag) {
-            cacheRequest(request, imageView);
+        if (bitmap == null && view != null && pauseFlag) {
+            cacheRequest(request, view);
             return;
         }
 
         if (bitmap == null) {
-            Worker worker = new Worker(request, imageView);
+            Worker worker = new Worker(request, view);
             worker.execute(request.hostHash);
             if (waiter != null && !worker.isDone() && !worker.isCancelled()) {
                 try {
@@ -161,14 +167,14 @@ final class Controller {
         }
     }
 
-    private static void abort(Request request, ImageView imageView) {
+    private static void abort(Request request, View view) {
         if (request.simpleTarget != null) {
             request.simpleTarget.onComplete(null);
-        } else if (imageView != null) {
+        } else if (view != null) {
             if (request.errorId >= 0 || request.errorDrawable != null) {
-                setError(request, imageView);
+                setError(request, view);
             } else {
-                setPlaceholder(request, imageView);
+                setPlaceholder(request, view);
             }
             if (request.listener != null) {
                 request.listener.onComplete(false);
@@ -176,7 +182,7 @@ final class Controller {
         }
     }
 
-    static void setResult(Request request, ImageView imageView, Object result, boolean fromMemory) {
+    static void setResult(Request request, View view, Object result, boolean fromMemory) {
         if (request.waiter != null) {
             return;
         }
@@ -186,26 +192,31 @@ final class Controller {
             return;
         }
 
-        if (imageView == null) {
+        if (view == null) {
             return;
         }
 
-        Activity activity = Utils.pickActivity(imageView);
+        Activity activity = Utils.pickActivity(view);
         if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
             return;
         }
 
         if (result != null) {
             if (result instanceof Bitmap) {
-                setBitmap(request, imageView, (Bitmap) result, fromMemory);
+                setBitmap(request, view, (Bitmap) result, fromMemory);
             } else if (result instanceof Drawable) {
-                imageView.setImageDrawable((Drawable) result);
+                setDrawable(view, (Drawable) result);
                 if (result instanceof Animatable) {
-                    startAnimDrawable(imageView, (Animatable) result);
+                    startAnimate(view, (Animatable) result);
+                }
+            } else if (view instanceof CustomView) {
+                ((CustomView) view).handleResult(result);
+                if (view instanceof Animatable) {
+                    startAnimate(view, (Animatable) view);
                 }
             }
         } else {
-            setError(request, imageView);
+            setError(request, view);
         }
 
         if (request.listener != null) {
@@ -213,29 +224,28 @@ final class Controller {
         }
     }
 
-    static void setBitmap(Request request, ImageView imageView, Bitmap bitmap, Boolean fromMemory){
+    static void setBitmap(Request request, View view, Bitmap bitmap, Boolean fromMemory) {
         if (request.alwaysAnimation || !fromMemory) {
             if (request.crossFadeDuration > 0) {
-                crossFade(imageView, bitmap, request);
+                crossFade(view, bitmap, request);
             } else {
-                imageView.setImageBitmap(bitmap);
-                startAnimation(request, imageView);
+                setBitmap(view, bitmap);
+                showAnimation(request, view);
             }
         } else {
-            imageView.setImageBitmap(bitmap);
+            setBitmap(view, bitmap);
         }
     }
 
-
-    private static void startAnimDrawable(ImageView imageView, Animatable animatable) {
+    private static void startAnimate(View view, Animatable animatable) {
         animatable.start();
-        imageView.addOnAttachStateChangeListener(attachListener);
+        view.addOnAttachStateChangeListener(attachListener);
     }
 
     private static class AttachListener implements View.OnAttachStateChangeListener {
         @Override
         public void onViewAttachedToWindow(View v) {
-            resumeAnimDrawable(v);
+            startAnimate(v);
         }
 
         @Override
@@ -244,19 +254,21 @@ final class Controller {
         }
     }
 
-    private static Animatable getAnimDrawable(View target) {
-        if (target instanceof ImageView) {
-            Drawable drawable = ((ImageView) target).getDrawable();
+    private static Animatable getAnimDrawable(View view) {
+        if (view instanceof ImageView) {
+            Drawable drawable = ((ImageView) view).getDrawable();
             if (drawable instanceof Animatable) {
                 return (Animatable) drawable;
             }
+        } else if (view instanceof Animatable) {
+            return (Animatable) view;
         }
         return null;
     }
 
-    private static void resumeAnimDrawable(View target) {
+    private static void startAnimate(View view) {
         try {
-            Animatable animatable = getAnimDrawable(target);
+            Animatable animatable = getAnimDrawable(view);
             if (animatable != null && !animatable.isRunning()) {
                 animatable.start();
             }
@@ -265,9 +277,9 @@ final class Controller {
         }
     }
 
-    static void stopAnimDrawable(View target) {
+    static void stopAnimDrawable(View view) {
         try {
-            Animatable animatable = getAnimDrawable(target);
+            Animatable animatable = getAnimDrawable(view);
             if (animatable != null && animatable.isRunning()) {
                 animatable.stop();
             }
@@ -276,46 +288,80 @@ final class Controller {
         }
     }
 
-    private static void crossFade(ImageView imageView, Bitmap bitmap, Request request) {
-        Drawable previous = imageView.getDrawable();
+    private static void crossFade(View view, Bitmap bitmap, Request request) {
+        Drawable previous = getDrawable(view);
         if (previous == null) {
             previous = new ColorDrawable(Color.TRANSPARENT);
         }
         Drawable current = new BitmapDrawable(Utils.appContext.getResources(), bitmap);
         TransitionDrawable drawable = new TransitionDrawable(new Drawable[]{previous, current});
         drawable.setCrossFadeEnabled(true);
-        imageView.setImageDrawable(drawable);
+        setDrawable(view, drawable);
         drawable.startTransition(request.crossFadeDuration);
     }
 
-    private static void startAnimation(Request request, ImageView imageView) {
+    private static void showAnimation(Request request, View view) {
         if (request.animation != null) {
-            imageView.clearAnimation();
-            imageView.startAnimation(request.animation);
+            view.clearAnimation();
+            view.startAnimation(request.animation);
         } else if (request.animationId != 0) {
             try {
                 Animation animation = AnimationUtils.loadAnimation(Utils.appContext, request.animationId);
-                imageView.clearAnimation();
-                imageView.startAnimation(animation);
+                view.clearAnimation();
+                view.startAnimation(animation);
             } catch (Exception e) {
                 LogProxy.e(TAG, e);
             }
         }
     }
 
-    private static void setPlaceholder(Request request, ImageView imageView) {
-        if (request.placeholderDrawable != null) {
-            imageView.setImageDrawable(request.placeholderDrawable);
-        } else if (request.placeholderId >= 0) {
-            imageView.setImageResource(request.placeholderId);
+    private static void setPlaceholder(Request request, View view) {
+        setDrawable(view, getDrawable(request.placeholderDrawable, request.placeholderId));
+    }
+
+    private static void setError(Request request, View view) {
+        setDrawable(view, getDrawable(request.errorDrawable, request.errorId));
+    }
+
+    private static void setBitmap(View view, Bitmap bitmap) {
+        if (bitmap != null) {
+            if (view instanceof ImageView) {
+                ((ImageView) view).setImageBitmap(bitmap);
+            } else if (view instanceof CustomView) {
+                BitmapDrawable drawable = new BitmapDrawable(Utils.appContext.getResources(), bitmap);
+                ((CustomView) view).setDrawable(drawable);
+            }
         }
     }
 
-    private static void setError(Request request, ImageView imageView) {
-        if (request.errorDrawable != null) {
-            imageView.setImageDrawable(request.errorDrawable);
-        } else if (request.errorId >= 0) {
-            imageView.setImageResource(request.errorId);
+    private static Drawable getDrawable(View view) {
+        if (view instanceof ImageView) {
+            return ((ImageView) view).getDrawable();
+        } else if (view instanceof CustomView) {
+            return ((CustomView) view).getDrawable();
         }
+        return null;
+    }
+
+    private static void setDrawable(View view, Drawable drawable) {
+        if (drawable != null) {
+            if (view instanceof ImageView) {
+                ((ImageView) view).setImageDrawable(drawable);
+            } else if (view instanceof CustomView) {
+                ((CustomView) view).setDrawable(drawable);
+            }
+        }
+    }
+
+    private static Drawable getDrawable(Drawable drawable, int resId) {
+        if (drawable != null) {
+            return drawable;
+        } else if (resId > 0) {
+            try {
+                return Utils.appContext.getDrawable(resId);
+            } catch (Throwable ignore) {
+            }
+        }
+        return null;
     }
 }

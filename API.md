@@ -68,6 +68,6 @@ alwaysAnimation(Boolean) | By default, the animation is only performed when the 
 asBitmap() | When GIF Decoder is set, by default, if the picture is a GIF picture, it will be decoded with GIF Decoder. <br/>Doodle will use BitmapFactory to decode and return a bitmap as result when setting 'asBitmap'.
 observeHost(Object) | Pass in the host (Activity/Fragment/View) to observe its lifecycle.
 addOption(String, String) | Options currently have two effects:<br/>1. Passing parameters to a custom Decoder.<br/>2. As part of CacheKey to distinguish different requests.
-setBitmapDecoder(BitmapDecoder) | Add BitmapDecoder for single request. <br/>This Decoder only works on the current Request, and will take precedence over other custom Decoders.
+setBitmapDecoder(BitmapDecoder) | Add BitmapDecoder for single request. <br/>This Decoder only works on the current Request, and it will take precedence over other custom Decoders.
 enableThumbnailDecoder() | This option is used to speed up the display of album thumbnails, and it only handle the album medias (which path starts with "content://media/").<br/>This option only effect on the current Request.
 listen(CompleteListener) | Observe if there is result when loading complete.

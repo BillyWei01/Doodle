@@ -3,7 +3,7 @@
 
 Doodle is a lightweight, efficient and powerful image loading library for Android.
 
-Doodle's aar package is only 93K, much smaller than Glide/Fresco.
+Doodle's aar package is only 94K, much smaller than Glide/Fresco.
 
 Doodle is not depend on third-party libraries, not require annotations , no need to configure proguard obfuscation.<br>
 In brief, It's easy to use.

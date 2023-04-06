@@ -16,6 +16,8 @@ class TestPagActivity : BaseActivity() {
 //        val imageUrl = "https://gd-hbimg.huaban.com/dfe6579f1f2f1cdd2d2f6f836c98aabef99b0aeb4071-4niAii_fw658"
 //        val pagUrl = "https://github.com/Tencent/libpag/blob/main/assets/PAG_LOGO.pag?raw=true"
 
+//        Doodle.load(pagUrl).listen { pagView.restart() }.into(pagView)
+
         val path = "file:///android_asset/pag_logo.pag"
         Doodle.load(path).into(pagView)
     }

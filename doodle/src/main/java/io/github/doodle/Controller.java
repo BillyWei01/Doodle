@@ -134,6 +134,14 @@ final class Controller {
             return;
         }
 
+        if(bitmap == null){
+            Object result = MemoryCache.resultWeakCache.get(request.getKey());
+            if (result != null) {
+                setResult(request, view, result, true);
+                return;
+            }
+        }
+
         if (view != null) {
             if (bitmap != null) {
                 setBitmap(request, view, bitmap, true);

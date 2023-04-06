@@ -15,17 +15,20 @@ final class MemoryCache {
 
     private static final AtomicBoolean FLAG = new AtomicBoolean(false);
 
+    static final WeakCache bitmapWeakCache = new WeakCache();
+    static final WeakCache resultWeakCache = new WeakCache();
+
     static Bitmap getBitmap(CacheKey key) {
         Bitmap bitmap = LruCache.get(key);
         if (bitmap == null) {
-            bitmap = WeakCache.get(key);
+            bitmap = (Bitmap) bitmapWeakCache.get(key);
         }
         return bitmap;
     }
 
     static void putBitmap(CacheKey key, Bitmap bitmap, boolean toWeakCache) {
         if (toWeakCache) {
-            WeakCache.put(key, bitmap);
+            bitmapWeakCache.put(key, bitmap);
         } else {
             LruCache.put(key, bitmap);
         }

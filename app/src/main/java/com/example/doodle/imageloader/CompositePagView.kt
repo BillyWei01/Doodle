@@ -28,6 +28,10 @@ class CompositePagView @JvmOverloads constructor(
         addView(pagView, params)
     }
 
+    fun restart() {
+        pagView.progress = 0.0
+    }
+
     override fun start() {
         pagView.play()
     }

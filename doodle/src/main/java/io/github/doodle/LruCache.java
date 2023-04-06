@@ -50,7 +50,7 @@ final class LruCache {
         while (iterator.hasNext() && sum > size) {
             Map.Entry<CacheKey, BitmapWrapper> entry = iterator.next();
             BitmapWrapper wrapper = entry.getValue();
-            WeakCache.put(entry.getKey(), wrapper.bitmap);
+            MemoryCache.bitmapWeakCache.put(entry.getKey(), wrapper.bitmap);
             iterator.remove();
             sum -= wrapper.bytesCount;
         }

@@ -1,48 +1,46 @@
 package io.github.doodle;
 
-import android.graphics.Bitmap;
-
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
 final class WeakCache {
-    private static final Map<CacheKey, BitmapReference> cache = new HashMap<>();
-    private static final ReferenceQueue<Bitmap> queue = new ReferenceQueue<>();
+    private final Map<CacheKey, ValueReference> cache = new HashMap<>();
+    private final ReferenceQueue<Object> queue = new ReferenceQueue<>();
 
-    static synchronized Bitmap get(CacheKey key) {
+    synchronized Object get(CacheKey key) {
         cleanQueue();
-        BitmapReference ref = cache.get(key);
-        return ref != null ? ref.get() : null;
+        ValueReference reference = cache.get(key);
+        return reference != null ? reference.get() : null;
     }
 
-    static synchronized void put(CacheKey key, Bitmap bitmap) {
+    synchronized void put(CacheKey key, Object value) {
         cleanQueue();
-        if (bitmap != null) {
-            BitmapReference ref = cache.get(key);
-            if (ref == null || ref.get() != bitmap) {
-                cache.put(key, new BitmapReference(key, bitmap, queue));
+        if (value != null) {
+            ValueReference ref = cache.get(key);
+            if (ref == null || ref.get() != value) {
+                cache.put(key, new ValueReference(key, value, queue));
             }
         }
     }
 
-    private static void cleanQueue() {
-        BitmapReference reference = (BitmapReference) queue.poll();
+    private void cleanQueue() {
+        ValueReference reference = (ValueReference) queue.poll();
         while (reference != null) {
-            BitmapReference ref = cache.get(reference.key);
+            ValueReference ref = cache.get(reference.key);
             if (ref != null && ref.get() == null) {
                 cache.remove(reference.key);
             }
-            reference = (BitmapReference) queue.poll();
+            reference = (ValueReference) queue.poll();
         }
     }
 
-    private static class BitmapReference extends WeakReference<Bitmap> {
+    private static class ValueReference extends WeakReference<Object> {
         private final CacheKey key;
 
-        BitmapReference(CacheKey key, Bitmap bitmap, ReferenceQueue<Bitmap> q) {
-            super(bitmap, q);
+        ValueReference(CacheKey key, Object value, ReferenceQueue<Object> q) {
+            super(value, q);
             this.key = key;
         }
     }

@@ -23,13 +23,13 @@ Doodle实现的功能包括但不限于以下列表：
 
 BitmapFactory本身可以解码JPG, PNG, WEBP,静态GIF等图片格式，高版本Android还支持HEIF格式。<br/>
 通过自定义解码，可以实现处理任意格式的文件。<br/>
-本项目的测试用例中实现了GIF, SVG, PAG以及动态WEBP等格式的解码。
+本项目的测试用例中实现了动态GIF, SVG, PAG以及动态WEBP等格式的解码。
 
 ## 使用方法
 
 ### 下载
 ```gradle
-implementation 'io.github.billywei01:doodle:2.1.0'
+implementation 'io.github.billywei01:doodle:2.1.1'
 ```
 
 ### 全局配置
@@ -77,7 +77,7 @@ Doodle加载图片，从load()方法开始，到into(), get() 或者 preload()�
 具体可以查看[API](API_CN.md)获取更多详情。
 
 
-## 相关链接
+## 实现原理
 
 https://juejin.cn/post/6844903695902064653
 

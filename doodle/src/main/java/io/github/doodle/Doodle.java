@@ -49,17 +49,6 @@ public final class Doodle {
     }
 
     /**
-     * Cache bitmap to {@link WeakCache},
-     * (with a map of WeakReference)
-     *
-     * @param tag    identify the bitmap
-     * @param bitmap bitmap
-     */
-    public static void cacheBitmap(String tag, Bitmap bitmap) {
-        cacheBitmap(tag, bitmap, true);
-    }
-
-    /**
      * @param tag         identify the bitmap
      * @param bitmap      bitmap
      * @param toWeakCache cache to {@link WeakCache} if true,

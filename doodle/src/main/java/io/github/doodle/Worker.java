@@ -66,6 +66,13 @@ final class Worker extends ExAsyncTask {
                 fromMemory = true;
                 return bitmap;
             }
+
+            Object result = MemoryCache.resultWeakCache.get(key);
+            if (result != null) {
+                fromMemory = true;
+                return result;
+            }
+
             MemoryCache.checkMemory();
             DiskCache.CacheInfo cacheInfo = resultCache.getCacheInfo(key);
             fromResultCache = cacheInfo != null;
@@ -81,11 +88,14 @@ final class Worker extends ExAsyncTask {
                     bitmap = Decoder.handleScaleAndCrop(bitmap, request);
                 }
                 if (bitmap == null && request.enableDrawable && Config.animatedDecoders != null) {
-                    Object result = tryDrawableDecoders(decodingInfo);
+                    result = tryDrawableDecoders(decodingInfo);
                     if (result != null) {
                         if (result instanceof Bitmap) {
                             bitmap = Decoder.handleScaleAndCrop((Bitmap) result, request);
                         } else {
+                            if (request.memoryCacheStrategy != MemoryCacheStrategy.NONE) {
+                                MemoryCache.resultWeakCache.put(key, result);
+                            }
                             return result;
                         }
                     }

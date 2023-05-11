@@ -1,2 +1,1 @@
 include ':app', ':doodle'
-include ":album"

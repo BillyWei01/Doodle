@@ -134,43 +134,40 @@ final class Controller {
             return;
         }
 
-        if(bitmap == null){
+        if (bitmap == null) {
             Object result = MemoryCache.resultWeakCache.get(request.getKey());
             if (result != null) {
                 setResult(request, view, result, true);
                 return;
             }
+        } else {
+            setResult(request, view, bitmap, true);
+            return;
         }
 
         if (view != null) {
-            if (bitmap != null) {
-                setBitmap(request, view, bitmap, true);
-            } else {
-                setPlaceholder(request, view);
-                Drawable placeholder = getDrawable(view);
-                if (placeholder instanceof Animatable && !pauseFlag) {
-                    startAnimate(view, (Animatable) placeholder);
-                }
+            setPlaceholder(request, view);
+            Drawable placeholder = getDrawable(view);
+            if (placeholder instanceof Animatable && !pauseFlag) {
+                startAnimate(view, (Animatable) placeholder);
             }
         }
 
-        if (bitmap == null && view != null && pauseFlag) {
+        if (view != null && pauseFlag) {
             cacheRequest(request, view);
             return;
         }
 
-        if (bitmap == null) {
-            Worker worker = new Worker(request, view);
-            worker.execute(request.hostHash);
-            if (waiter != null && !worker.isDone() && !worker.isCancelled()) {
-                try {
-                    waiter.result = (Bitmap) worker.get(waiter.timeout, TimeUnit.MILLISECONDS);
-                } catch (Throwable e) {
-                    LogProxy.e(TAG, e);
-                }
-                if (!worker.isDone()) {
-                    worker.cancel(true);
-                }
+        Worker worker = new Worker(request, view);
+        worker.execute(request.hostHash);
+        if (waiter != null && !worker.isDone() && !worker.isCancelled()) {
+            try {
+                waiter.result = (Bitmap) worker.get(waiter.timeout, TimeUnit.MILLISECONDS);
+            } catch (Throwable e) {
+                LogProxy.e(TAG, e);
+            }
+            if (!worker.isDone()) {
+                worker.cancel(true);
             }
         }
     }

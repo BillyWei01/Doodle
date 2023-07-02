@@ -69,20 +69,24 @@ final class Controller {
                     preRequest.viewReference = null;
                 }
                 // If tag not equal, cancel previous request which binds to view.
-                WeakReference<Worker> workerRef = preRequest.workerReference;
-                if (workerRef != null) {
-                    preRequest.workerReference = null;
-                    Worker preTask = workerRef.get();
-                    if (preTask != null && !preTask.isCancelled()) {
-                        preTask.cancel(true);
-                    }
-                }
+                cancelTask(preRequest);
             }
         } else if (tag != null) {
             // Should not be here
             throw new IllegalArgumentException("Invalid tag type");
         }
         return false;
+    }
+
+    private static void cancelTask(Request request) {
+        WeakReference<Worker> workerRef = request.workerReference;
+        if (workerRef != null) {
+            request.workerReference = null;
+            Worker preTask = workerRef.get();
+            if (preTask != null && !preTask.isCancelled()) {
+                preTask.cancel(true);
+            }
+        }
     }
 
     private static View prepareView(Request request) {
@@ -109,6 +113,14 @@ final class Controller {
             view.setTag(R.id.doodle_view_tag, null);
         }
         return view;
+    }
+
+    static void clear(View view) {
+        Object tag = view.getTag(R.id.doodle_view_tag);
+        if (tag instanceof Request) {
+            cancelTask((Request) tag);
+            view.setTag(R.id.doodle_view_tag, null);
+        }
     }
 
     static void start(Request request) {

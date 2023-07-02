@@ -3,9 +3,12 @@ package io.github.doodle;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.view.View;
+import android.widget.ImageView;
 
 import io.github.doodle.LifecycleManager.Event;
 import io.github.doodle.enums.ClipType;
+import io.github.doodle.interfaces.CustomView;
 
 import java.io.File;
 
@@ -46,6 +49,18 @@ public final class Doodle {
 
     public static Request load(Uri uri) {
         return new Request(uri);
+    }
+
+    public static void clear(ImageView imageView) {
+        if (imageView != null) {
+            Controller.clear(imageView);
+        }
+    }
+
+    public static void clear(CustomView customView) {
+        if (customView instanceof View) {
+            Controller.clear((View) customView);
+        }
     }
 
     /**

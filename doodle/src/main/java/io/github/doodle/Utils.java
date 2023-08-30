@@ -192,22 +192,23 @@ final class Utils {
         }
     }
 
-    static boolean streamToFile(InputStream inputStream, File des) throws IOException {
-        if (inputStream == null || des == null) {
+    static boolean streamToFile(InputStream inputStream, File dst) throws IOException {
+        if (inputStream == null || dst == null) {
             return false;
         }
-        if (!Utils.makeFileIfNotExist(des)) {
+        if (!Utils.makeFileIfNotExist(dst)) {
             closeQuietly(inputStream);
             return false;
         }
         byte[] buffer = ByteArrayPool.getBasicArray();
-        OutputStream out = new BufferedOutputStream(new FileOutputStream(des));
+        FileOutputStream out = new FileOutputStream(dst);
         try {
             while (true) {
                 int count = inputStream.read(buffer, 0, buffer.length);
                 if (count <= 0) break;
                 out.write(buffer, 0, count);
             }
+            out.getFD().sync();
         } finally {
             closeQuietly(out);
             closeQuietly(inputStream);

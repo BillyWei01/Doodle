@@ -293,11 +293,13 @@ final class Worker extends ExAsyncTask {
     }
 
     private static void saveBitmap(File file, Bitmap bitmap, Bitmap.CompressFormat format) throws IOException {
-        OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+        FileOutputStream fos = new FileOutputStream(file);
+        OutputStream out = new BufferedOutputStream(fos);
         try {
             int quality = format == Bitmap.CompressFormat.WEBP ? 100 : 95;
             bitmap.compress(format, quality, out);
             out.flush();
+            fos.getFD().sync();
         } finally {
             Utils.closeQuietly(out);
         }

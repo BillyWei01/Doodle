@@ -61,6 +61,13 @@ final class DiskCache {
         return (checkJournal()) && !journal.containsKey(key);
     }
 
+    /**
+     * Only check if exist record from cache(Map)
+     */
+    synchronized boolean hasRecord(CacheKey key){
+        return journal != null && journal.containsKey(key);
+    }
+
     synchronized void record(CacheKey key, File file, boolean isRGB565) {
         if (!checkJournal()) return;
         if (key.h1 == 0 && key.h2 == 0) {

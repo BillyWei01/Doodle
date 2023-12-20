@@ -28,8 +28,9 @@ final class Worker extends ExAsyncTask {
     private long time;
     private static final AtomicInteger count = new AtomicInteger();
 
-    Worker(Request request, View view) {
+    Worker(Request request, View view, boolean isHttpTask) {
         this.request = request;
+        this.mIsHttpTask = isHttpTask;
         if (LogProxy.isDebug()) {
             Log.d(TAG, "Loading start, count:" + count.incrementAndGet());
         }

@@ -61,6 +61,10 @@ final class Downloader {
         }
     }
 
+    static boolean hasRecord(CacheKey key) {
+        return sourceCache.hasRecord(key);
+    }
+
     static File download(String url, CacheKey key) throws IOException {
         return streamToFile(getInputStream(url), key,true);
     }
@@ -74,9 +78,6 @@ final class Downloader {
         if (desFile.exists()) {
             return desFile;
         }
-        // Downloading job uses time on waiting IO much more than CPU computing,
-        // so extend window size to increase the concurrency.
-        Scheduler.pipeExecutor.extendWindow();
         File tmpFile = null;
         try {
             tmpFile = new File(desFile.getParent(), desFile.getName() + ".tmp");
@@ -91,7 +92,6 @@ final class Downloader {
             }
             throw new IOException("Download failed");
         } finally {
-            Scheduler.pipeExecutor.reduceWindow();
             if (needCache) {
                 Utils.deleteQuietly(tmpFile);
             }
@@ -101,7 +101,7 @@ final class Downloader {
     static File downloadOnly(String url) {
         CacheKey key = new CacheKey(url);
         FutureTask<File> future = new FutureTask<>(() -> download(url, key));
-        Scheduler.tagExecutor.execute(key, future);
+        Scheduler.tagExecutor.execute(key, future, true);
         try {
             return future.get();
         } catch (Throwable e) {

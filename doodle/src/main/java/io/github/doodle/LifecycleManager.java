@@ -80,6 +80,7 @@ final class LifecycleManager {
                 ExAsyncTask target = reference.get();
                 if (target == null || target == task) {
                     iterator.remove();
+                    break;
                 }
             }
         }

@@ -13,22 +13,22 @@ import io.github.doodle.enums.MediaType;
 import io.github.doodle.interfaces.DataParser;
 
 /**
- * Data fetcher. <br/>
- * <p>
- * Doodle support data types:
- * <p> <br/>
- * Remote image <br/>
- * http:// <br/>
- * https://
- * <p> <br/>
- * File<br/>
- * file://<br/>
- * file:///android_asset/
- * <p> <br/>
+ * Data fetcher.             <p><br/>
+ *
+ * Doodle support data types: <p> <br/>
+ *
+ * Remote image             <br/>
+ * http://                  <br/>
+ * https://                 <p> <br/>
+ *
+ * File                     <br/>
+ * file://                  <br/>
+ * file:///android_asset/   <p> <br/>
+
  * Resource (raw, drawable) <br/>
- * android.resource://
- * <p> <br/>
- * Media <br/>
+ * android.resource://      <p> <br/>
+ *
+ * Media                    <br/>
  * content://
  */
 class DataFetcher implements Closeable {

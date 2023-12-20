@@ -41,6 +41,8 @@ abstract class ExAsyncTask {
 
     private int mHostHash;
 
+    protected boolean mIsHttpTask;
+
     enum Status {
         PENDING,
         RUNNING,
@@ -78,6 +80,7 @@ abstract class ExAsyncTask {
             }
         };
     }
+
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public final boolean isDone() {
@@ -136,7 +139,7 @@ abstract class ExAsyncTask {
         }
         mHostHash = hostHash;
         mStatus = Status.RUNNING;
-        Scheduler.tagExecutor.execute(generateTag(), mFuture);
+        Scheduler.tagExecutor.execute(generateTag(), mFuture, mIsHttpTask);
     }
 
     private void finish(Object result) {
@@ -158,9 +161,9 @@ abstract class ExAsyncTask {
     void handleEvent(int event) {
         if (!isCancelled() && mStatus != Status.FINISHED) {
             if (event == Event.PAUSE) {
-                Scheduler.pipeExecutor.pushBack(mFuture);
+                getExecutor().pushBack(mFuture);
             } else if (event == Event.RESUME) {
-                Scheduler.pipeExecutor.popFront(mFuture);
+                getExecutor().popFront(mFuture);
             } else if (event == Event.DESTROY) {
                 // When getting the DESTROY event, it means the LifecycleManager had already removed this task.
                 // Mark mHostHash to be zero, to indicate that there's no need to call 'unregister'.
@@ -168,5 +171,9 @@ abstract class ExAsyncTask {
                 cancel(true);
             }
         }
+    }
+
+    private Scheduler.PipeExecutor getExecutor() {
+        return mIsHttpTask ? Scheduler.ioExecutor : Scheduler.cpExecutor;
     }
 }

@@ -41,7 +41,7 @@ abstract class ExAsyncTask {
 
     private int mHostHash;
 
-    protected boolean mIsHttpTask;
+    protected boolean needDownloading;
 
     enum Status {
         PENDING,
@@ -139,7 +139,7 @@ abstract class ExAsyncTask {
         }
         mHostHash = hostHash;
         mStatus = Status.RUNNING;
-        Scheduler.tagExecutor.execute(generateTag(), mFuture, mIsHttpTask);
+        Scheduler.tagExecutor.execute(generateTag(), mFuture, needDownloading);
     }
 
     private void finish(Object result) {
@@ -174,6 +174,6 @@ abstract class ExAsyncTask {
     }
 
     private Scheduler.PipeExecutor getExecutor() {
-        return mIsHttpTask ? Scheduler.ioExecutor : Scheduler.cpExecutor;
+        return needDownloading ? Scheduler.ioExecutor : Scheduler.cpExecutor;
     }
 }

@@ -1,6 +1,8 @@
-package com.example.doodle.config
+package com.example.doodle.util
 
+import com.example.doodle.config.PathManager
 import io.fastkv.FastKV
+import io.fastkv.interfaces.FastEncoder
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -9,7 +11,7 @@ open class KVData(name: String) {
         FastKV.Builder(PathManager.fastKVDir, name).encoder(encoders()).build()
     }
 
-    protected open fun encoders(): Array<FastKV.Encoder<*>>? {
+    protected open fun encoders(): Array<FastEncoder<*>>? {
         return null
     }
 
@@ -21,7 +23,7 @@ open class KVData(name: String) {
     protected fun string(key: String, defValue: String = "") = StringProperty(key, defValue)
     protected fun array(key: String, defValue: ByteArray = EMPTY_ARRAY) = ArrayProperty(key, defValue)
     protected fun stringSet(key: String, defValue: Set<String>? = null) = StringSetProperty(key, defValue)
-    protected fun <T> obj(key: String, encoder: FastKV.Encoder<T>) = ObjectProperty(key, encoder)
+    protected fun <T> obj(key: String, encoder: FastEncoder<T>) = ObjectProperty(key, encoder)
 
     companion object {
         val EMPTY_ARRAY = ByteArray(0)
@@ -86,7 +88,7 @@ class DoubleProperty(private val key: String, private val defValue: Double) :
 class StringProperty(private val key: String, private val defValue: String) :
     ReadWriteProperty<KVData, String> {
     override fun getValue(thisRef: KVData, property: KProperty<*>): String {
-        return thisRef.kv.getString(key, defValue)
+        return thisRef.kv.getString(key, defValue) ?: ""
     }
 
     override fun setValue(thisRef: KVData, property: KProperty<*>, value: String) {
@@ -116,7 +118,7 @@ class StringSetProperty(private val key: String, private val defValue: Set<Strin
     }
 }
 
-class ObjectProperty<T>(private val key: String, private val encoder: FastKV.Encoder<T>) :
+class ObjectProperty<T>(private val key: String, private val encoder: FastEncoder<T>) :
     ReadWriteProperty<KVData, T?> {
     override fun getValue(thisRef: KVData, property: KProperty<*>): T? {
         return thisRef.kv.getObject(key)

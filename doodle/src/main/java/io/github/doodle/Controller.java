@@ -170,9 +170,9 @@ final class Controller {
             return;
         }
 
-        boolean isHttpTask = request.path.startsWith("http")
+        boolean needDownloading = request.path.startsWith("http")
                 && !Downloader.hasRecord(request.getKey());
-        Worker worker = new Worker(request, view, isHttpTask);
+        Worker worker = new Worker(request, view, needDownloading);
         worker.execute(request.hostHash);
         if (waiter != null && !worker.isDone() && !worker.isCancelled()) {
             try {

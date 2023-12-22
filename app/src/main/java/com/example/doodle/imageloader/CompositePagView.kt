@@ -20,6 +20,7 @@ class CompositePagView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr), CustomView, Animatable {
 
     private val imageView: ImageView = ImageView(context)
+    // PAG aar包只有arm架构，x86架构不支持
     private val pagView: PAGView = PAGView(context)
 
     init {

@@ -31,7 +31,7 @@ BitmapFactory本身可以解码JPG, PNG, WEBP,静态GIF等图片格式，高版�
 
 ### 下载
 ```gradle
-implementation 'io.github.billywei01:doodle:2.1.5'
+implementation 'io.github.billywei01:doodle:2.1.6'
 ```
 
 ### 全局配置

@@ -6,7 +6,6 @@ import java.util.*;
 
 /**
  * Loading tasks scheduler.
- * For handling concurrency and priority.
  */
 final class Scheduler {
     private static final int CUP_COUNT = Runtime.getRuntime().availableProcessors();
@@ -56,11 +55,11 @@ final class Scheduler {
         private static final Set<CacheKey> scheduledTags = new HashSet<>();
         private static final Map<CacheKey, LinkedList<Task>> waitingQueues = new HashMap<>();
 
-        public synchronized void execute(CacheKey tag, Runnable r, boolean isHttpTask) {
+        public synchronized void execute(CacheKey tag, Runnable r, boolean needDownloading) {
             if (r == null) {
                 return;
             }
-            Task task = wrapTask(r, tag, isHttpTask);
+            Task task = wrapTask(r, tag, needDownloading);
             if (!scheduledTags.contains(tag)) {
                 start(tag, task);
             } else {
@@ -75,15 +74,15 @@ final class Scheduler {
 
         private void start(CacheKey tag, Task task) {
             scheduledTags.add(tag);
-            if (task.isHttpTask) {
+            if (task.needDownloading) {
                 ioExecutor.execute(task);
             } else {
                 cpExecutor.execute(task);
             }
         }
 
-        private Task wrapTask(Runnable r, CacheKey tag, boolean isHttpTask){
-            return new Task(r, isHttpTask) {
+        private Task wrapTask(Runnable r, CacheKey tag, boolean needDownloading){
+            return new Task(r, needDownloading) {
                 @Override
                 public void run() {
                     try {
@@ -111,11 +110,11 @@ final class Scheduler {
 
     private static abstract class Task implements Runnable {
         final Runnable r;
-        final boolean isHttpTask;
+        final boolean needDownloading;
 
-        Task(Runnable runnable, boolean isHttpTask) {
+        Task(Runnable runnable, boolean needDownloading) {
             this.r = runnable;
-            this.isHttpTask = isHttpTask;
+            this.needDownloading = needDownloading;
         }
     }
 

@@ -1,14 +1,14 @@
 package com.example.doodle.config
 
 import android.util.Log
-import io.fastkv.FastKV
 import com.example.doodle.util.LogUtil
 import com.example.doodle.BuildConfig
+import io.fastkv.interfaces.FastLogger
 import io.github.album.interfaces.AlbumLogger
 import io.github.doodle.interfaces.DLogger
 import java.lang.Exception
 
-object Logger : DLogger, FastKV.Logger, AlbumLogger {
+object Logger : DLogger, FastLogger, AlbumLogger {
     override fun isDebug(): Boolean {
         return BuildConfig.DEBUG
     }

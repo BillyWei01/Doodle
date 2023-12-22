@@ -1,6 +1,6 @@
 package com.example.doodle.remote.setting
 
-import com.example.doodle.config.KVData
+import com.example.doodle.util.KVData
 
 object SettingData : KVData("user_setting") {
     var showHidden by boolean("showHidden")

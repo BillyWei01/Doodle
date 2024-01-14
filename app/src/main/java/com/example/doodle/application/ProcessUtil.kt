@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Process
 import android.text.TextUtils
 import android.util.Log
-import com.example.doodle.config.AppConfig
 import java.io.BufferedReader
 import java.io.FileReader
 

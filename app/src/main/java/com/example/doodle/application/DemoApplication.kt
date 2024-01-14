@@ -7,17 +7,18 @@ import com.example.doodle.config.Logger
 import com.example.doodle.album.AlbumImageLoader
 import com.example.doodle.imageloader.AnimatedWebpDecoder
 import com.example.doodle.imageloader.GifDecoder
-import com.example.doodle.imageloader.IOExecutor
 import com.example.doodle.imageloader.OkHttpSourceFetcher
 import com.example.doodle.imageloader.PagDecoder
 import com.example.doodle.imageloader.SvgDecoder
 import com.example.doodle.util.UncaughtExceptionInterceptor
 import io.github.album.EasyAlbum
 import io.github.doodle.Doodle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
 
 
 class DemoApplication : Application() {
-    private val procName: String by lazy {
+    private val appProcessName: String by lazy {
         ProcessUtil.getProcessName(this) ?: AppConfig.APPLICATION_ID
     }
 
@@ -28,20 +29,22 @@ class DemoApplication : Application() {
 
     override fun onTrimMemory(level: Int) {
         super.onTrimMemory(level)
-        if (procName == AppConfig.APPLICATION_ID) {
+        if (appProcessName == AppConfig.APPLICATION_ID) {
             Doodle.trimMemory(level)
         }
     }
 
     private fun initApplication(context: Application) {
-        if (procName == AppConfig.APPLICATION_ID) {
+        if (appProcessName == AppConfig.APPLICATION_ID) {
             AppConfig.setAppContext(context)
 
             UncaughtExceptionInterceptor.init()
 
+            val ioExecutor = Dispatchers.IO.asExecutor()
+
             Doodle.config()
                 .setLogger(Logger)
-                .setExecutor(IOExecutor)
+                .setExecutor(ioExecutor)
                 .setHttpSourceFetcher(OkHttpSourceFetcher)
                 .addAnimatedDecoders(GifDecoder)
                 .addAnimatedDecoders(AnimatedWebpDecoder)
@@ -50,7 +53,7 @@ class DemoApplication : Application() {
 
             EasyAlbum.config()
                 .setLogger(Logger)
-                .setExecutor(IOExecutor)
+                .setExecutor(ioExecutor)
                 .setImageLoader(AlbumImageLoader)
                 .setItemAnimator(DefaultItemAnimator())
         }

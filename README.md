@@ -4,7 +4,7 @@
 
 Doodle是一个轻量，高效，功能丰富的图片加载库。<br/>
 
-Doodle依赖包仅94K，远小于Glide/Fresco等其他加载库。<br/>
+Doodle依赖包仅94K，远小于Glide等其他加载库，实现了绝大部分Glide所支持的功能。<br/>
 Doodle不依赖第三方库，不需要注解和配置混淆，开箱即用。<br/>
 
 Doodle实现的功能包括但不限于以下列表：
